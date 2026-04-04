@@ -186,7 +186,7 @@ export default function PopupWidget() {
               gap: '6px',
               padding: '6px 14px 6px 12px',
               borderRadius: '16px',
-              background: mode === 'note' ? 'url(/mode_bg.png) center/cover no-repeat' : 'transparent',
+              background: mode === 'note' ? `url(${import.meta.env.BASE_URL}mode_bg.png) center/cover no-repeat` : 'transparent',
               border: 'none',
               cursor: 'pointer',
               fontSize: '14px',

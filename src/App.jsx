@@ -1,6 +1,7 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import PopupWidget from './components/PopupWidget'
+import Features from './components/Features'
 import CTAButtons from './components/CTAButtons'
 import CursorEffect from './components/CursorEffect'
 
@@ -17,7 +18,7 @@ export default function App() {
       {/* Product overview screenshot */}
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <img
-          src="/product/overview.png"
+          src={`${import.meta.env.BASE_URL}product/overview.png`}
           alt="Product overview"
           style={{
             width: '100%',
@@ -26,6 +27,10 @@ export default function App() {
             display: 'block',
           }}
         />
+      </div>
+
+      <div style={{ marginTop: '64px' }}>
+        <Features />
       </div>
 
       <CTAButtons />
