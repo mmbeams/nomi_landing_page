@@ -1,4 +1,17 @@
+import { useEffect, useState, useRef } from 'react'
+import { TextParticle } from '@/components/ui/text-particle'
+
 export default function Footer() {
+  const nomiRef = useRef(null)
+  const [nomiFontSize, setNomiFontSize] = useState(0)
+
+  useEffect(() => {
+    const update = () => setNomiFontSize(window.innerWidth * 0.2)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   const linkStyle = {
     fontFamily: 'Inter, sans-serif',
     fontSize: '13px',
@@ -28,20 +41,26 @@ export default function Footer() {
       }}
     >
       {/* Left — NOMI */}
-      <span
+      <div
+        ref={nomiRef}
         style={{
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: 900,
-          fontSize: '20vw',
-          letterSpacing: '-0.05em',
-          lineHeight: 0.85,
-          color: 'var(--text-main)',
-          WebkitTextStroke: '2px var(--text-main)',
           flexShrink: 0,
+          height: `${nomiFontSize * 0.85}px`,
+          width: `${nomiFontSize * 2.6}px`,
         }}
       >
-        NOMI
-      </span>
+        {nomiFontSize > 0 && (
+          <TextParticle
+            text="NOMI"
+            fontSize={nomiFontSize}
+            fontFamily="Inter, sans-serif"
+            fontWeight={900}
+            particleColor="#2D2A26"
+            particleSize={2}
+            particleDensity={4}
+          />
+        )}
+      </div>
 
       {/* Right — footer links */}
       <div
