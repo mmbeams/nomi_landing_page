@@ -5,13 +5,25 @@
 @tailwind utilities;
 
 :root {
-  --bg-color: #FFFFFF;
+  --bg-color: #F3F2F1;
   --ui-white: #FEFCF9;
   --text-main: #2D2A26;
   --text-dim: #7C746C;
   --accent: #C97B3A;
   --border: rgba(201, 123, 58, 0.15);
   --shadow: 0 20px 50px rgba(76, 58, 41, 0.08);
+
+  /* shadcn variables */
+  --background: 30 6% 95%;
+  --foreground: 24 6% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 24 6% 15%;
+  --primary: 153 99% 49%;
+  --primary-foreground: 24 6% 10%;
+  --muted: 30 6% 95%;
+  --muted-foreground: 24 6% 45%;
+  --border: 30 10% 90%;
+  --ring: 153 99% 49%;
 }
 
 * {

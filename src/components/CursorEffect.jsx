@@ -27,7 +27,7 @@ export default function CursorEffect() {
           vy: Math.sin(angle) * speed - 0.8,
           life: 1.0,
           decay: 0.035 + Math.random() * 0.04,
-          size: Math.random() < 0.4 ? 6 : 4,
+          size: Math.random() < 0.4 ? 12 : 8,
           color: COLORS[Math.floor(Math.random() * COLORS.length)],
         })
       }

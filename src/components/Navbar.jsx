@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 
 const LEFT  = { x1: 1.72754, y1: 3.23926, x2: 7.3705,  y2: 7.37071 }
 const RIGHT = { x1: 10.7466, y1: 3.23926, x2: 16.3895, y2: 7.37071 }
@@ -87,17 +87,62 @@ function InteractiveLogo() {
 }
 
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const navRef = useRef(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const el = navRef.current
+    if (!el) return
+    el.style.opacity = '0'
+    el.style.transform = 'translateY(-20px)'
+    el.style.filter = 'blur(8px)'
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s ease, filter 0.8s ease'
+    setTimeout(() => {
+      el.style.opacity = '1'
+      el.style.transform = 'translateY(0)'
+      el.style.filter = 'blur(0px)'
+    }, 100)
+  }, [])
+
   return (
     <nav
+      ref={navRef}
       style={{
-        position: 'relative',
+        position: 'fixed',
+        top: 0,
+        left: 0,
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
         padding: '16px 28px',
         width: '100%',
+        zIndex: 100,
+        background: scrolled ? 'rgba(243, 242, 241, 0.5)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        WebkitBackdropFilter: scrolled ? 'blur(12px)' : 'none',
+        transition: 'background 0.3s, backdrop-filter 0.3s',
       }}
     >
+      {/* Left — NOMI wordmark */}
+      <span
+        style={{
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 400,
+          fontSize: '12px',
+          letterSpacing: '0.04em',
+          color: 'var(--text-main)',
+          textDecoration: 'none',
+        }}
+      >
+        NOMI
+      </span>
+
       {/* Center — logo pinned to true page center */}
       <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
         <InteractiveLogo />
@@ -105,8 +150,8 @@ export default function Navbar() {
 
       {/* Right — nav links */}
       <div style={{ display: 'flex', gap: '32px', fontSize: '12px', alignItems: 'center' }}>
-        <a href="#" style={{ color: 'var(--text-dim)', textDecoration: 'none' }}>Product</a>
-        <a href="#" style={{ color: 'var(--text-dim)', textDecoration: 'none' }}>About</a>
+        <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Product</a>
+        <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>About</a>
         <a
           href="#"
           style={{

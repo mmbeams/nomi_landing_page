@@ -1,12 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
+import { ShiningText } from './ui/shining-text'
 
 const MODES = ['note', 'task', 'tag']
-
-const PLACEHOLDERS = {
-  note: 'Capture anything....',
-  task: 'What needs to be done?',
-  tag:  'Add a tag...',
-}
 
 function LogoMark({ size = 14 }) {
   return (
@@ -22,18 +17,18 @@ function LogoMark({ size = 14 }) {
 function TaskIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
-      <rect x="1.5" y="1.5" width="14" height="14" rx="3" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M152.667 92.3333H147.333M151 95.6666H149" transform="translate(-143.333,-84.333) scale(1)" stroke="#141B34" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="1.5" y="1.5" width="14" height="14" rx="4" stroke="#141B34" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.5 8.5H11.5M7 11.5H10" stroke="#141B34" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
 function NotepadIcon() {
   return (
-    <svg width="17" height="17" viewBox="0 0 14 16" fill="none">
-      <rect x="0.5" y="0.5" width="13" height="15" rx="3" stroke="#141B34" strokeWidth="1" />
-      <line x1="3.5" y1="5" x2="10.5" y2="5" stroke="#141B34" strokeWidth="1" strokeLinecap="round" />
-      <line x1="3.5" y1="8" x2="8.5" y2="8" stroke="#141B34" strokeWidth="1" strokeLinecap="round" />
+    <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+      <rect x="1.5" y="1" width="14" height="15" rx="4" stroke="#141B34" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="5" y1="6" x2="12" y2="6" stroke="#141B34" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="5" y1="9.5" x2="10" y2="9.5" stroke="#141B34" strokeWidth="1.2" strokeLinecap="round" />
     </svg>
   )
 }
@@ -41,7 +36,7 @@ function NotepadIcon() {
 function SendIcon() {
   return (
     <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
-      <path d="M3.5 13.5L13.5 3.5M13.5 3.5H6.5M13.5 3.5V10.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.5 13.5V3.5M8.5 3.5L4 8M8.5 3.5L13 8" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -51,26 +46,30 @@ export default function PopupWidget() {
   const [text, setText] = useState('')
   const [submitted, setSubmitted] = useState([])
   const [sendPulse, setSendPulse] = useState(false)
-  const [focused, setFocused] = useState(false)
-  const [cursorX, setCursorX] = useState(0)
   const inputRef = useRef(null)
-  const measureRef = useRef(null)
+  const cardRef = useRef(null)
+  const ctaRef = useRef(null)
 
   useEffect(() => {
-    if (measureRef.current) {
-      measureRef.current.textContent = text || ''
-      setCursorX(measureRef.current.offsetWidth)
-    }
-  }, [text])
-
-  const cycleMode = () => {
-    setMode(prev => MODES[(MODES.indexOf(prev) + 1) % MODES.length])
-  }
+    const els = [cardRef.current, ctaRef.current]
+    els.forEach((el, i) => {
+      if (!el) return
+      el.style.opacity = '0'
+      el.style.transform = 'translateY(20px)'
+      requestAnimationFrame(() => {
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease'
+        setTimeout(() => {
+          el.style.opacity = '1'
+          el.style.transform = 'translateY(0)'
+        }, 800 + i * 150)
+      })
+    })
+  }, [])
 
   const handleKeyDown = (e) => {
     if (e.key === 'Tab') {
       e.preventDefault()
-      cycleMode()
+      setMode(prev => MODES[(MODES.indexOf(prev) + 1) % MODES.length])
     }
     if (e.key === 'Enter' && text.trim()) {
       handleSend()
@@ -93,15 +92,18 @@ export default function PopupWidget() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
 
-      {/* Popup card — rx=32 from popup.svg, stroke=#EBE8E5 */}
+      {/* Popup card */}
       <div
+        ref={cardRef}
         onClick={() => inputRef.current?.focus()}
         style={{
           width: '540px',
-          background: '#FFFFFF',
+          background: 'rgba(255, 255, 255, 0.1)',
           borderRadius: '32px',
           boxShadow: 'none',
-          border: '1px solid #EBE8E5',
+          border: '1px solid rgba(235, 232, 229, 0.5)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
           padding: '14px 18px 10px',
           display: 'flex',
           flexDirection: 'column',
@@ -117,11 +119,8 @@ export default function PopupWidget() {
               value={text}
               onChange={e => setText(e.target.value)}
               onKeyDown={handleKeyDown}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
-              placeholder={text.length > 0 ? '' : PLACEHOLDERS[mode]}
+              placeholder=""
               autoFocus
-              className="popup-input"
               style={{
                 width: '100%',
                 height: '46px',
@@ -137,28 +136,28 @@ export default function PopupWidget() {
                 lineHeight: '46px',
               }}
             />
-            <span
-              ref={measureRef}
-              aria-hidden="true"
-              style={{
+            {text.length === 0 && (
+              <div style={{
                 position: 'absolute',
-                visibility: 'hidden',
-                whiteSpace: 'pre',
-                fontSize: '17px',
-                fontWeight: 400,
-                fontFamily: 'Inter, sans-serif',
+                left: 0,
+                top: 0,
+                height: '46px',
+                display: 'flex',
+                alignItems: 'center',
                 pointerEvents: 'none',
-              }}
-            />
-            {focused && (
-              <span className="typing-cursor" style={{ position: 'absolute', left: `${cursorX + 2}px` }} />
+              }}>
+                <ShiningText
+                  text="Capture anything...."
+                  className="!text-[17px] !font-normal"
+                />
+              </div>
             )}
           </div>
           <button
             onClick={handleSend}
             style={{
-              width: '46px',
-              height: '46px',
+              width: '36px',
+              height: '36px',
               borderRadius: '50%',
               background: sendPulse ? '#111' : '#1C1917',
               border: 'none',
@@ -175,7 +174,7 @@ export default function PopupWidget() {
           </button>
         </div>
 
-        {/* Row 2: Mode tabs — rx=16 from popup.svg */}
+        {/* Row 2: Mode tabs */}
         <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
           {/* Note pill */}
           <button
@@ -200,7 +199,7 @@ export default function PopupWidget() {
             Note
           </button>
 
-          {/* Notepad icon — matches popup.svg circle buttons */}
+          {/* Notepad icon */}
           <button
             onClick={() => setMode('task')}
             style={{
@@ -209,9 +208,11 @@ export default function PopupWidget() {
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              borderRadius: '16px',
-              background: mode === 'task' ? '#4ADE80' : '#FFFFFF',
-              border: mode === 'task' ? 'none' : '0.5px solid rgba(0,0,0,0.2)',
+              borderRadius: '50%',
+              background: mode === 'task' ? '#4ADE80' : 'rgba(255, 255, 255, 0.1)',
+              border: 'none',
+              backdropFilter: mode === 'task' ? 'none' : 'blur(12px)',
+              WebkitBackdropFilter: mode === 'task' ? 'none' : 'blur(12px)',
               cursor: 'pointer',
               transition: 'background 0.18s, border 0.18s',
             }}
@@ -219,7 +220,7 @@ export default function PopupWidget() {
             <NotepadIcon />
           </button>
 
-          {/* Tag # — matches popup.svg circle buttons */}
+          {/* Tag # */}
           <button
             onClick={() => setMode('tag')}
             style={{
@@ -228,9 +229,11 @@ export default function PopupWidget() {
               justifyContent: 'center',
               width: '36px',
               height: '36px',
-              borderRadius: '16px',
-              background: mode === 'tag' ? '#4ADE80' : '#FFFFFF',
-              border: mode === 'tag' ? 'none' : '0.5px solid rgba(0,0,0,0.2)',
+              borderRadius: '50%',
+              background: mode === 'tag' ? '#4ADE80' : 'rgba(255, 255, 255, 0.1)',
+              border: 'none',
+              backdropFilter: mode === 'tag' ? 'none' : 'blur(12px)',
+              WebkitBackdropFilter: mode === 'tag' ? 'none' : 'blur(12px)',
               cursor: 'pointer',
               fontSize: '16px',
               fontWeight: 600,
@@ -244,6 +247,46 @@ export default function PopupWidget() {
         </div>
       </div>
 
+      {/* CTA buttons */}
+      <div ref={ctaRef} style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+        <button
+          style={{
+            background: 'var(--text-main)',
+            color: '#FEFCF9',
+            padding: '6px 12px',
+            borderRadius: '32px',
+            fontWeight: 500,
+            fontSize: '12px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'opacity 0.2s',
+            fontFamily: 'Inter, sans-serif',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        >
+          Join Waitlist
+        </button>
+        <button
+          style={{
+            border: '1px solid var(--text-main)',
+            color: 'var(--text-main)',
+            background: 'transparent',
+            padding: '6px 12px',
+            borderRadius: '32px',
+            fontWeight: 500,
+            fontSize: '12px',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            fontFamily: 'Inter, sans-serif',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
+          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+        >
+          How it works
+        </button>
+      </div>
+
       {/* Submitted entries */}
       {submitted.length > 0 && (
         <div style={{ width: '540px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -255,11 +298,13 @@ export default function PopupWidget() {
                 alignItems: 'center',
                 gap: '10px',
                 padding: '10px 16px',
-                background: '#FFFFFF',
+                background: 'rgba(255, 255, 255, 0.1)',
                 borderRadius: '16px',
-                border: '1px solid #EBE8E5',
+                border: '1px solid rgba(235, 232, 229, 0.5)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
                 fontSize: '14px',
-                color: '#374151',
+                color: 'var(--text-main)',
                 fontFamily: 'Inter, sans-serif',
                 animation: 'fadeSlideIn 0.25s ease',
               }}
@@ -288,21 +333,6 @@ export default function PopupWidget() {
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateY(-6px); }
           to   { opacity: 1; transform: translateY(0); }
-        }
-        .popup-input::placeholder {
-          color: rgba(39, 28, 17, 0.35);
-        }
-        .typing-cursor {
-          width: 2px;
-          height: 20px;
-          background: #01FA92;
-          border-radius: 1px;
-          animation: typingBlink 1s step-end infinite;
-          pointer-events: none;
-        }
-        @keyframes typingBlink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
         }
       `}</style>
     </div>
