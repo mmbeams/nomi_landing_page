@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useIsMobile } from '@/hooks/useMobile'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -25,11 +26,17 @@ const features = [
   },
 ]
 
-function FeatureCard({ feature, index }) {
+function FeatureCard({ feature, index, mobile }) {
   return (
     <div
       className="feature-card"
-      style={{
+      style={mobile ? {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '24px',
+        padding: '0 20px',
+      } : {
         minWidth: '90vw',
         maxWidth: '1200px',
         height: '100%',
@@ -43,10 +50,10 @@ function FeatureCard({ feature, index }) {
       {/* Text side */}
       <div
         style={{
-          flex: '0 0 25%',
+          flex: mobile ? 'none' : '0 0 25%',
           display: 'flex',
           flexDirection: 'column',
-          gap: '16px',
+          gap: '12px',
         }}
       >
         <span
@@ -64,7 +71,7 @@ function FeatureCard({ feature, index }) {
         <h3
           style={{
             fontFamily: 'Instrument Serif, serif',
-            fontSize: '42px',
+            fontSize: mobile ? '32px' : '42px',
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
             color: 'var(--text-main)',
@@ -81,7 +88,6 @@ function FeatureCard({ feature, index }) {
             color: 'var(--text-main)',
             fontWeight: 400,
             margin: 0,
-            maxWidth: '320px',
           }}
         >
           {feature.description}
@@ -89,7 +95,7 @@ function FeatureCard({ feature, index }) {
       </div>
 
       {/* Image side */}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: mobile ? 'none' : 1 }}>
         <img
           src={`${import.meta.env.BASE_URL}${feature.image}`}
           alt={feature.title}
@@ -106,8 +112,11 @@ function FeatureCard({ feature, index }) {
 export default function Features() {
   const sectionRef = useRef(null)
   const trackRef = useRef(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
+    if (isMobile) return
+
     const section = sectionRef.current
     const track = trackRef.current
     if (!section || !track) return
@@ -133,7 +142,19 @@ export default function Features() {
       tween.scrollTrigger?.kill()
       tween.kill()
     }
-  }, [])
+  }, [isMobile])
+
+  if (isMobile) {
+    return (
+      <section style={{ width: '100%', padding: '40px 0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '56px' }}>
+          {features.map((feature, i) => (
+            <FeatureCard key={feature.title} feature={feature} index={i} mobile />
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section
@@ -156,7 +177,7 @@ export default function Features() {
         }}
       >
         {features.map((feature, i) => (
-          <FeatureCard key={feature.title} feature={feature} index={i} />
+          <FeatureCard key={feature.title} feature={feature} index={i} mobile={false} />
         ))}
       </div>
     </section>

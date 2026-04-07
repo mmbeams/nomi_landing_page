@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { ShiningText } from './ui/shining-text'
+import { useIsMobile } from '@/hooks/useMobile'
 
 const MODES = ['note', 'task', 'tag']
 
@@ -49,6 +50,7 @@ export default function PopupWidget() {
   const inputRef = useRef(null)
   const cardRef = useRef(null)
   const ctaRef = useRef(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const els = [cardRef.current, ctaRef.current]
@@ -90,14 +92,15 @@ export default function PopupWidget() {
   }, [mode])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', padding: isMobile ? '0 16px' : '0' }}>
 
       {/* Popup card */}
       <div
         ref={cardRef}
         onClick={() => inputRef.current?.focus()}
         style={{
-          width: '540px',
+          width: '100%',
+          maxWidth: '540px',
           background: 'rgba(255, 255, 255, 0.1)',
           borderRadius: '32px',
           boxShadow: 'none',
@@ -289,7 +292,7 @@ export default function PopupWidget() {
 
       {/* Submitted entries */}
       {submitted.length > 0 && (
-        <div style={{ width: '540px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <div style={{ width: '100%', maxWidth: '540px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {submitted.map(entry => (
             <div
               key={entry.id}

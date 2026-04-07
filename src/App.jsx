@@ -8,9 +8,11 @@ import Footer from './components/Footer'
 import CursorEffect from './components/CursorEffect'
 import { DitheringShader } from './components/ui/dithering-shader'
 import { StaggerTestimonials } from './components/ui/stagger-testimonials'
+import { useIsMobile } from './hooks/useMobile'
 
 export default function App() {
   const overviewRef = useRef(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const el = overviewRef.current
@@ -27,13 +29,12 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-color)', display: 'flex', flexDirection: 'column', gap: isMobile ? '16px' : '24px' }}>
       <CursorEffect />
       <Navbar />
 
       {/* Shader background wrapping hero through overview */}
-      <div style={{ position: 'relative', overflow: 'hidden', paddingTop: '48px' }}>
-        {/* Shader as background — taller than container, pinned to bottom so the filled wave area sits higher */}
+      <div style={{ position: 'relative', overflow: 'hidden', paddingTop: isMobile ? '24px' : '48px' }}>
         <DitheringShader
           shape="wave"
           type="8x8"
@@ -49,12 +50,12 @@ export default function App() {
         {/* Content on top */}
         <div style={{ position: 'relative', zIndex: 1 }}>
           <Hero />
-          <div style={{ margin: '40px 0 80px' }}>
+          <div style={{ margin: isMobile ? '28px 0 48px' : '40px 0 80px' }}>
             <PopupWidget />
           </div>
 
           {/* Product overview screenshot */}
-          <div ref={overviewRef} style={{ display: 'flex', justifyContent: 'center', paddingTop: '80px', opacity: 0 }}>
+          <div ref={overviewRef} style={{ display: 'flex', justifyContent: 'center', paddingTop: isMobile ? '40px' : '80px', padding: isMobile ? '40px 16px 0' : '80px 0 0', opacity: 0 }}>
             <img
               src={`${import.meta.env.BASE_URL}product/overview.png`}
               alt="Product overview"
@@ -69,11 +70,11 @@ export default function App() {
         </div>
       </div>
 
-      <div style={{ marginTop: '64px' }}>
+      <div style={{ marginTop: isMobile ? '32px' : '64px' }}>
         <Features />
       </div>
 
-      <div style={{ marginTop: '64px' }}>
+      <div style={{ marginTop: isMobile ? '24px' : '64px' }}>
         <StaggerTestimonials />
       </div>
 

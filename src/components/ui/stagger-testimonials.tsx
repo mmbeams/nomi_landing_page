@@ -143,7 +143,7 @@ export const StaggerTestimonials: React.FC = () => {
 
   return (
     <div
-      style={{ position: 'relative', width: '100%', overflow: 'hidden', height: 600 }}
+      style={{ position: 'relative', width: '100%', overflow: 'hidden', height: cardSize === 290 ? 480 : 600 }}
     >
       {testimonialsList.map((testimonial, index) => {
         const position = testimonialsList.length % 2

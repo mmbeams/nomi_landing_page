@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from 'react'
+import { useIsMobile } from '@/hooks/useMobile'
 
 const LEFT  = { x1: 1.72754, y1: 3.23926, x2: 7.3705,  y2: 7.37071 }
 const RIGHT = { x1: 10.7466, y1: 3.23926, x2: 16.3895, y2: 7.37071 }
@@ -89,6 +90,7 @@ function InteractiveLogo() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const navRef = useRef(null)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -149,9 +151,13 @@ export default function Navbar() {
       </div>
 
       {/* Right — nav links */}
-      <div style={{ display: 'flex', gap: '32px', fontSize: '12px', alignItems: 'center' }}>
-        <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Product</a>
-        <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>About</a>
+      <div style={{ display: 'flex', gap: isMobile ? '12px' : '32px', fontSize: '12px', alignItems: 'center' }}>
+        {!isMobile && (
+          <>
+            <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>Product</a>
+            <a href="#" style={{ color: 'var(--text-main)', textDecoration: 'none' }}>About</a>
+          </>
+        )}
         <a
           href="#"
           style={{

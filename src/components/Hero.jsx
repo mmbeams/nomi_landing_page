@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { GradientWaveText } from './ui/gradient-wave-text'
+import { useIsMobile } from '@/hooks/useMobile'
 
 export default function Hero() {
   const subtitle = 'an agentic work assistant help organize all your notes, photos, and links.'
@@ -7,6 +8,7 @@ export default function Hero() {
   const line2Ref = useRef(null)
   const tagsRef = useRef(null)
   const [hovered, setHovered] = useState(false)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const els = [line1Ref.current, line2Ref.current, tagsRef.current]
@@ -24,17 +26,20 @@ export default function Hero() {
     })
   }, [])
 
+  const fontSize = isMobile ? 'clamp(40px, 11vw, 60px)' : '84px'
+
   return (
     <header
       style={{
         display: 'flex',
         justifyContent: 'center',
-        padding: '96px 24px 0',
+        padding: isMobile ? '80px 20px 0' : '96px 24px 0',
       }}
     >
       <div
         style={{
-          width: '540px',
+          width: '100%',
+          maxWidth: '540px',
           textAlign: 'left',
         }}
         onMouseEnter={() => setHovered(true)}
@@ -44,7 +49,7 @@ export default function Hero() {
           ref={line1Ref}
           style={{
             fontFamily: 'Instrument Serif, serif',
-            fontSize: '84px',
+            fontSize,
             lineHeight: 1,
             marginBottom: '0',
             letterSpacing: '-0.03em',
@@ -62,11 +67,20 @@ export default function Hero() {
           </GradientWaveText>
         </h1>
 
-        <div ref={line2Ref} style={{ display: 'flex', alignItems: 'flex-end', gap: '20px', opacity: 0 }}>
+        <div
+          ref={line2Ref}
+          style={{
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            alignItems: isMobile ? 'flex-start' : 'flex-end',
+            gap: '20px',
+            opacity: 0,
+          }}
+        >
           <h1
             style={{
               fontFamily: 'Instrument Serif, serif',
-              fontSize: '84px',
+              fontSize,
               lineHeight: 1,
               letterSpacing: '-0.03em',
               margin: 0,
@@ -90,7 +104,7 @@ export default function Hero() {
             ref={tagsRef}
             style={{
               opacity: 0,
-              paddingBottom: '6px',
+              paddingBottom: isMobile ? '0' : '6px',
             }}
           >
             <span
