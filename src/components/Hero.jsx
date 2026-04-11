@@ -3,7 +3,7 @@ import { GradientWaveText } from './ui/gradient-wave-text'
 import { useIsMobile } from '@/hooks/useMobile'
 
 export default function Hero() {
-  const subtitle = 'an agentic work assistant help organize all your notes, photos, and links.'
+  const subtitleMobile = 'an agentic work assistant help organize all your notes, photos, and links.'
   const line1Ref = useRef(null)
   const line2Ref = useRef(null)
   const tagsRef = useRef(null)
@@ -107,19 +107,37 @@ export default function Hero() {
               paddingBottom: isMobile ? '0' : '6px',
             }}
           >
-            <span
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '13px',
-                fontWeight: 400,
-                color: 'var(--text-main)',
-                letterSpacing: '0.04em',
-                lineHeight: 1.3,
-                display: 'block',
-              }}
-            >
-              {subtitle}
-            </span>
+            {isMobile ? (
+              <span
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '13px',
+                  fontWeight: 400,
+                  color: 'var(--text-main)',
+                  letterSpacing: '0.04em',
+                  lineHeight: 1.3,
+                  display: 'block',
+                }}
+              >
+                {subtitleMobile}
+              </span>
+            ) : (
+              <span
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '13px',
+                  fontWeight: 400,
+                  color: 'var(--text-main)',
+                  letterSpacing: '0.04em',
+                  lineHeight: 1.3,
+                  display: 'block',
+                }}
+              >
+                an agentic work assistant help<br />
+                organize all your notes,<br />
+                photos, and links.
+              </span>
+            )}
           </div>
         </div>
       </div>

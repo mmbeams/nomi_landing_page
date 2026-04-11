@@ -114,7 +114,7 @@ export default function Footer() {
         ref={nomiRef}
         style={{
           flexShrink: 0,
-          height: `${nomiFontSize * 0.85}px`,
+          height: `${nomiFontSize * 0.76}px`,
           width: `${nomiFontSize * 2.6}px`,
         }}
       >
@@ -132,7 +132,7 @@ export default function Footer() {
       </div>
 
       {/* Right — footer links */}
-      <div style={{ display: 'flex', gap: '48px', paddingBottom: '8px' }}>
+      <div style={{ display: 'flex', gap: '48px' }}>
         <div>
           <div style={headingStyle}>Features</div>
           <a href="#" style={linkStyle}>Capture</a>

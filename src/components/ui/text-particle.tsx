@@ -71,11 +71,15 @@ export function TextParticle({
       const textMetrics = ctx.measureText(text)
       const textWidth = textMetrics.width
 
-      // Calculate position to center text
+      // Draw text bottom-aligned so glyph bottom sits at canvas bottom edge
       const x = canvas.width / 2
-      const y = canvas.height / 2
+      const y = canvas.height - textMetrics.actualBoundingBoxDescent
 
       ctx.fillText(text, x, y)
+
+      // #region agent log
+      fetch('http://127.0.0.1:7699/ingest/17d75a04-7eb2-4b45-96b7-8328388eff04',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'f248ba'},body:JSON.stringify({sessionId:'f248ba',location:'text-particle.tsx:initText',message:'canvas+text metrics post-fix',data:{canvasW:canvas.width,canvasH:canvas.height,fontSize,drawY:y,glyphTop:y-textMetrics.actualBoundingBoxAscent,glyphBottom:y+textMetrics.actualBoundingBoxDescent,actualBoundingBoxAscent:textMetrics.actualBoundingBoxAscent,actualBoundingBoxDescent:textMetrics.actualBoundingBoxDescent},hypothesisId:'A-B-C',runId:'post-fix',timestamp:Date.now()})}).catch(()=>{});
+      // #endregion
 
       const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height)
       const newParticles: Particle[] = []

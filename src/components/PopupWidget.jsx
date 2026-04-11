@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { ShiningText } from './ui/shining-text'
 import { useIsMobile } from '@/hooks/useMobile'
+import InvitePopup from './InvitePopup'
 
 const MODES = ['note', 'task', 'tag']
 
@@ -47,6 +48,7 @@ export default function PopupWidget() {
   const [text, setText] = useState('')
   const [submitted, setSubmitted] = useState([])
   const [sendPulse, setSendPulse] = useState(false)
+  const [showPopup, setShowPopup] = useState(false)
   const inputRef = useRef(null)
   const cardRef = useRef(null)
   const ctaRef = useRef(null)
@@ -253,6 +255,7 @@ export default function PopupWidget() {
       {/* CTA buttons */}
       <div ref={ctaRef} style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
         <button
+          onClick={() => setShowPopup(true)}
           style={{
             background: 'var(--text-main)',
             color: '#FEFCF9',
@@ -268,7 +271,7 @@ export default function PopupWidget() {
           onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
           onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
         >
-          Join Waitlist
+          Get invite code
         </button>
         <button
           style={{
@@ -338,6 +341,8 @@ export default function PopupWidget() {
           to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
+
+      <InvitePopup open={showPopup} onClose={() => setShowPopup(false)} />
     </div>
   )
 }

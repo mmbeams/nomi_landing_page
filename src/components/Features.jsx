@@ -9,19 +9,19 @@ const features = [
   {
     title: 'Capture everything',
     description:
-      'Notes, photos, links, voice memos — grab anything in a single tap. Your ideas never slip away again.',
+      'Notes, photos, links, voice memos. Grab anything in a single tap. Your ideas never slip away again.',
     image: 'product/1.png',
   },
   {
     title: 'Smart Detect',
     description:
-      'AI recognizes what you capture — receipts, screenshots, documents — and extracts key details instantly.',
+      'AI recognizes what you capture. Receipts, screenshots, documents. Key details extracted instantly.',
     image: 'product/2.png',
   },
   {
     title: 'Smart Organize',
     description:
-      'AI understands your content and sorts it automatically. Tags, folders, connections — all handled for you.',
+      'AI understands your content and sorts it automatically. Tags, folders, connections. All handled for you.',
     image: 'product/3.png',
   },
 ]

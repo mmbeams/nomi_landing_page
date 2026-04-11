@@ -5,6 +5,7 @@ import PopupWidget from './components/PopupWidget'
 import Features from './components/Features'
 import Waitlist from './components/Waitlist'
 import Footer from './components/Footer'
+import { Team } from './components/Team'
 import CursorEffect from './components/CursorEffect'
 import { DitheringShader } from './components/ui/dithering-shader'
 import { StaggerTestimonials } from './components/ui/stagger-testimonials'
@@ -93,7 +94,19 @@ export default function App() {
         />
 
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <Waitlist />
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            padding: isMobile ? '80px 20px' : '120px 64px',
+            gap: isMobile ? '64px' : '96px',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Waitlist />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Team />
+            </div>
+          </div>
           <Footer />
           <div style={{ paddingBottom: '40px' }} />
         </div>
