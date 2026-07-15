@@ -4,13 +4,14 @@ import { useState } from 'react'
 //  Google Form config — replace with your own
 // =============================================
 const GOOGLE_FORM_ACTION =
-  'https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse'
-const GOOGLE_FORM_EMAIL_FIELD = 'entry.XXXXXXX'
+  'https://docs.google.com/forms/d/e/1FAIpQLSdZNZFS5E6mPZeMeJctTIrRyzwEQIUaX8ZdObSTCD98RGPe7w/formResponse'
+const GOOGLE_FORM_EMAIL_FIELD = 'entry.673936610'
 
 export default function InvitePopup({ open, onClose }) {
   const [email, setEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [error, setError] = useState(false)
 
   if (!open) return null
 
@@ -19,10 +20,13 @@ export default function InvitePopup({ open, onClose }) {
     if (!email || submitting) return
 
     setSubmitting(true)
+    setError(false)
     try {
       const formData = new URLSearchParams()
       formData.append(GOOGLE_FORM_EMAIL_FIELD, email)
 
+      // no-cors: the Form endpoint never exposes its response, so only
+      // network-level failures are detectable here.
       await fetch(GOOGLE_FORM_ACTION, {
         method: 'POST',
         mode: 'no-cors',
@@ -38,7 +42,7 @@ export default function InvitePopup({ open, onClose }) {
         setSubmitted(false)
       }, 2000)
     } catch {
-      setSubmitted(true)
+      setError(true)
     } finally {
       setSubmitting(false)
     }
@@ -129,6 +133,16 @@ export default function InvitePopup({ open, onClose }) {
                   color: 'var(--text-main)',
                 }}
               />
+              {error && (
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '12px',
+                  color: '#C0392B',
+                  margin: 0,
+                }}>
+                  Something went wrong — please try again.
+                </p>
+              )}
               <button
                 type="submit"
                 disabled={submitting}
